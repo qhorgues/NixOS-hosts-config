@@ -1,4 +1,4 @@
-{ self, inputs, pkgs, pkgs-unstable, ... }:
+{ self, inputs, qhorgues-config, pkgs, pkgs-unstable, ... }:
 {
     imports = [
         inputs.nixos-hardware.nixosModules.framework-16-7040-amd
@@ -8,121 +8,80 @@
     mx = {
       core.network.security-mode = true;
       hardware = {
-        ssd.lists = [ "/" "/mnt/Games" ];
-        framework-fan-ctrl.enable = true;
+        ssd.lists = [ "/" ]; # All mountpoint with a SSD
+        framework-fan-ctrl.enable = false; # If you use framework-laptop
+        powersave.enable = false; # Auto energy saving mode on batterie
         gpu = {
-          vendor = "amd";
-          acceleration = "rocm";
-          generation = "rdna3";
+          vendor = "amd"; #  "nvidia"/"intel"
+          acceleration = "rocm"; #  "cuda" or null
+          generation = "rdna3"; # Use chipset reférence or null
+          # (ex: Nvidia: "ada-lovelace", "blackwell",
+          #               "ampere", "pascal",
+          #  AMD: "rdna4", "gcn-4-gen", "gcn-1-gen")
         };
         bluetooth.enable = true;
       };
-      main-user = {
+      main-user = { # Define main user
         enable = true;
-        userName = "quentin";
-        userFullName = "Quentin Horgues";
+        userName = "<username>";
+        userFullName = "<Full name>";
       };
       gnome = {
         enable = true;
-        scaling = 2;
-        text-scaling = 0.7;
+        scaling = 1;
+        text-scaling = 1;
       };
       services = {
         vm = {
-          enable = true;
-          users = [ "quentin" ];
+          enable = false; # Enable VM tools
+          users = [ "<username>" ]; # Trusted user
         };
         docker = {
-          enable = true;
-          users = [ "quentin" ];
+          enable = false; # Enable docker tools
+          users = [ "<username>" ]; # Trusted user
         };
-        lamp.enable = true;
-        postgresql.enable = false;
+        lamp.enable = false; # Enable Apache/PHP/MariaDB stack
+        postgresql.enable = false; # Enable postgres SQL
         llm = {
-          enable = true;
-          open-webui.enable = true;
+          enable = false; # Enable ollama tools
+          open-webui.enable = false;
         };
-        printing.enable = true;
+        printing.enable = false;
+        ios-connect.enable = false; # Enable IOS connection tools
       };
-      programs = {
+      programs = { # Enable some system app
         modeling.enable = false;
-        obs-studio.enable = true;
+        obs-studio.enable = false;
         games = {
-          enable = true;
-          force-fsr4-for-rdna3 = true;
-          gamemode.users = [ "quentin" ];
-        };
-        team-viewer.enable = false;
-        arduino = {
           enable = false;
-          users = [ "quentin" ];
+          force-fsr4-for-rdna3 = false; # Only for AMD radeon 7000 user
+          gamemode.users = [ "<username>" ]; # Allowed user for gamemode
+        };
+        team-viewer.enable = false; # Enable team viewerapp
+        arduino = { # Enable arduino dev kit
+          enable = false;
+          users = [ "<username>" ]; # Allowed user for arduino access
         };
       };
     };
 
-    networking.hostName = "fw-laptop-quentin";
+    networking.hostName = "<hostname>";
 
-    fileSystems."/mnt/Games" =
-    { device = "/dev/disk/by-uuid/1b35568b-4447-4c80-9880-4b359d4ecb6c";
-        fsType = "ext4";
-    };
 
     boot.kernelParams = [
-      "amdgpu.runpm=0" "amdgpu.bapm=0" "amdgpu.aspm=0" "pcie_aspm=off"
     ];
 
     services.udev.extraRules = ''
-        # Framework Laptop 16 Keyboard Module - ANSI
-        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0012", ATTR{power/wakeup}="disabled"
-
-        # Framework Laptop 16 RGB Macropad
-        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0013", ATTR{power/wakeup}="disabled"
-
-        # Framework Laptop 16 Numpad Module
-        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0014", ATTR{power/wakeup}="disabled"
-
-        # Framework Laptop 16 Keyboard Module - ISO
-        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0018", ATTR{power/wakeup}="disabled"
     '';
-
-    # Fix for AMD GPU crash
-    nixpkgs.overlays = [
-      (self: super:
-        let
-          version = "20250808";
-        in
-        {
-        linux-firmware = super.linux-firmware.overrideAttrs (old: {
-          version = version;
-          src = super.fetchurl {
-            url = "https://cdn.kernel.org/pub/linux/kernel/firmware/linux-firmware-${version}.tar.xz";
-            sha256 = "sha256-wClVG0WhWSbJ16XfGgtUAEQGTxkVfFf8Edkf0Kreg38=";
-          };
-          patches = [];
-        });
-      })
-    ];
-
-    programs.adb.enable = true;
-    users.users."quentin".extraGroups = [ "adbusers" ];
 
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
       extraSpecialArgs = {
-          inherit self inputs pkgs pkgs-unstable;
+          inherit self inputs pkgs pkgs-unstable qhorgues-config;
       };
       users = {
-        "quentin" = import ./quentin.nix;
+        "<username>" = import ./username.nix;
       };
     };
-
-    # mx.services.modulix-daemon = {
-    #   enable = true;
-    #  package = inputs.modulix-daemon.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    # };
-
-    # environment.systemPackages = [
-    #   pkgs.git
-    # ];
 }

@@ -20,12 +20,12 @@
   {
     nixosConfigurations =
     {
-      "fw-laptop-16" = let
+      default = let
         system = "x86_64-linux";
       in nixpkgs.lib.nixosSystem
       {
         system = system;
-        specialArgs = { inherit self;
+        specialArgs = { inherit self qhorgues-config;
             pkgs-unstable = import nixpkgs-unstable {
               system = system;
               config = nixpkgsConfig;
