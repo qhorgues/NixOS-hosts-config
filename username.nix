@@ -1,7 +1,6 @@
-{ inputs, pkgs, qhorgues-config, ... }:
+{ pkgs, qhorgues-config, ... }:
 {
   imports = [
-    qhorgues-config.homeManager.quentin
   ];
 
   mx = {

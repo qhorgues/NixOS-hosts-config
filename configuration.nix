@@ -1,8 +1,8 @@
-{ self, inputs, qhorgues-config, pkgs, pkgs-unstable, ... }:
+{ nixos-hardware, ... }:
 {
     imports = [
-        inputs.nixos-hardware.nixosModules.framework-16-7040-amd
-        ./hardware-configuration.nix
+      nixos-hardware.<hardware module>
+      ./hardware-configuration.nix
     ];
 
     mx = {
@@ -12,8 +12,8 @@
         framework-fan-ctrl.enable = false; # If you use framework-laptop
         powersave.enable = false; # Auto energy saving mode on batterie
         gpu = {
-          vendor = "amd"; #  "nvidia"/"intel"
-          acceleration = "rocm"; #  "cuda" or null
+          vendor = "amd"; #  "amd"/"nvidia"/"intel"
+          computing = "rocm"; #  "rocm"/"cuda" or null
           generation = "rdna3"; # Use chipset reférence or null
           # (ex: Nvidia: "ada-lovelace", "blackwell",
           #               "ampere", "pascal",
@@ -50,6 +50,15 @@
         ios-connect.enable = false; # Enable IOS connection tools
       };
       programs = { # Enable some system app
+        home-manager = {
+          enable = true;
+          users = {
+            quentin = {
+              configPath = ./username.nix;
+              homeModule = "<username>"; # Home Manager config name folder in remote flake
+            };
+          };
+        };
         modeling.enable = false;
         obs-studio.enable = false;
         games = {
@@ -66,22 +75,4 @@
     };
 
     networking.hostName = "<hostname>";
-
-
-    boot.kernelParams = [
-    ];
-
-    services.udev.extraRules = ''
-    '';
-
-    home-manager = {
-      useGlobalPkgs = true;
-      useUserPackages = true;
-      extraSpecialArgs = {
-          inherit self inputs pkgs pkgs-unstable qhorgues-config;
-      };
-      users = {
-        "<username>" = import ./username.nix;
-      };
-    };
 }
