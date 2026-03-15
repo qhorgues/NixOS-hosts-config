@@ -1,46 +1,47 @@
-{ inputs, pkgs, ... }:
+{ pkgs, qhorgues-config, ... }:
 {
   imports = [
-    ../../modules/home-manager
     ./home-manager/zed-remote-folder.nix
   ];
 
   mx = {
     update = {
         flake_path = "/home/quentin/config";
-        flake_config = "fw-laptop-16";
+        flake_config = "default";
     };
     auto-update.enable = true;
     programs = {
-      firefox.enable = true;
-      thunderbird.enable = true;
-      cryptomator.enable = true;
-      office.enable = true;
-      discord.enable = true;
-      element.enable = true;
-      audio-enhancer.enable = true;
-      zed-editor.enable = true;
-      ssh.enable = true;
-      vscode.enable = true;
-      kdrive.enable = true;
-      graphism.enable = true;
-      git.enable = true;
-      vim.enable = false;
-      linux-base-tools.enable = true;
-      winboat.enable = true;
+      firefox.enable = true; # Install firefox pre setup
+      thunderbird.enable = true; # # Install thunderbird
+      cryptomator.enable = true; # Install cryptomator
+      office.enable = true; # Install all office tools (libbre office, only office, latex studio)
+      discord.enable = true; # Install discord flatpak
+      element.enable = true; # Install Element flatpak
+      audio-enhancer.enable = true; # Install audio enhancer with custom profiles
+      zed-editor.enable = true; # Install custom zed editor
+      ssh.enable = true; # Install ssh client
+      vscode.enable = true; # Install custom VS Code
+      kdrive.enable = true; # Install kdrive
+      graphism.enable = true; # Install graphism tools (GIMP, Krita, Inkscape)
+      git.enable = true; # Install git with config
+      vim.enable = false; # Install vim
+      linux-base-tools.enable = true; # Install linux base tools (htop, fastfetch, ...)
+      winboat.enable = true; # Install Winboat /!\ NEED ENABLE DOCKER ON SYSTEM CONFIG
+
+      # Enable dev tools
       dev = {
         enable = true;
         nix = true;
         cpp = true;
         mpi-lib = true;
         rust = true;
-        python = false;
-        node = true;
+        python = true;
+        node = false;
         php = true;
         sql = true;
         java = false;
         gnome-dev = false;
-        ci = true;
+        ci = false;
       };
     };
   };
@@ -54,10 +55,8 @@
 
   home.file.".config/BOE_CQ_______NE160QDM_NZ6.icm".source = ./home-manager/BOE_CQ_______NE160QDM_NZ6.icm;
 
-
-
   home.packages = [
     pkgs.sushi
-    inputs.coe33.packages.${pkgs.stdenv.hostPlatform.system}.default
+    qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
   ];
 }

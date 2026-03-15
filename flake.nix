@@ -1,17 +1,18 @@
 {
-  description = "A very basic flake";
+  description = "Framework Laptop 16 config";
 
   inputs = {
-    qhorgues-config.url = "github:quentin/NixOS-config/remote-flake";
+    qhorgues-config.url = "github:qhorgues/NixOS-config";
     nixpkgs.follows = "qhorgues-config/nixpkgs";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
         url = "github:nix-community/home-manager/release-25.11";
         inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, qhorgues-config, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, qhorgues-config, nixos-hardware, home-manager, ... }:
   let
     nixpkgsConfig = {
       allowUnfree = true;
@@ -20,23 +21,25 @@
   {
     nixosConfigurations =
     {
-      "fw-laptop-16" = let
+      default = let
         system = "x86_64-linux";
+        pkgs-unstable = import nixpkgs-unstable {
+          system = system;
+          config = nixpkgsConfig;
+        };
       in nixpkgs.lib.nixosSystem
       {
         system = system;
-        specialArgs = { inherit self;
-            pkgs-unstable = import nixpkgs-unstable {
-              system = system;
-              config = nixpkgsConfig;
-            };
+        specialArgs = { inherit nixos-hardware pkgs-unstable;
+          self = qhorgues-config;
         };
         modules = [
           qhorgues-config.nixosModules.modulix-os
+          home-manager.nixosModules.default
           ./configuration.nix
-          inputs.home-manager.nixosModules.default
         ];
       };
     };
+
   };
 }

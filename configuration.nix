@@ -1,23 +1,27 @@
-{ self, inputs, pkgs, pkgs-unstable, ... }:
+{ nixos-hardware, ... }:
 {
     imports = [
-        inputs.nixos-hardware.nixosModules.framework-16-7040-amd
-        ./hardware-configuration.nix
+      nixos-hardware.nixosModules.framework-16-7040-amd
+      ./hardware-configuration.nix
     ];
 
     mx = {
       core.network.security-mode = true;
       hardware = {
-        ssd.lists = [ "/" "/mnt/Games" ];
-        framework-fan-ctrl.enable = true;
+        ssd.lists = [ "/" "/mnt/Games" ]; # All mountpoint with a SSD
+        framework-fan-ctrl.enable = true; # If you use framework-laptop
+        powersave.enable = false; # Auto energy saving mode on batterie
         gpu = {
-          vendor = "amd";
-          acceleration = "rocm";
-          generation = "rdna3";
+          vendor = "amd"; #  "amd"/"nvidia"/"intel"
+          computing = "rocm"; #  "rocm"/"cuda" or null
+          generation = "rdna3"; # Use chipset reférence or null
+          # (ex: Nvidia: "ada-lovelace", "blackwell",
+          #               "ampere", "pascal",
+          #  AMD: "rdna4", "gcn-4-gen", "gcn-1-gen")
         };
         bluetooth.enable = true;
       };
-      main-user = {
+      main-user = { # Define main user
         enable = true;
         userName = "quentin";
         userFullName = "Quentin Horgues";
@@ -29,38 +33,49 @@
       };
       services = {
         vm = {
-          enable = true;
-          users = [ "quentin" ];
+          enable = true; # Enable VM tools
+          users = [ "quentin" ]; # Trusted user
         };
         docker = {
-          enable = true;
-          users = [ "quentin" ];
+          enable = true; # Enable docker tools
+          users = [ "quentin" ]; # Trusted user
         };
-        lamp.enable = true;
-        postgresql.enable = false;
+        lamp.enable = true; # Enable Apache/PHP/MariaDB stack
+        postgresql.enable = false; # Enable postgres SQL
         llm = {
-          enable = true;
+          enable = true; # Enable ollama tools
           open-webui.enable = true;
         };
         printing.enable = true;
+        ios-connect.enable = false; # Enable IOS connection tools
       };
-      programs = {
+      programs = { # Enable some system app
+        home-manager = {
+          enable = true;
+          users = {
+            quentin = {
+              configPath = ./quentin.nix;
+              homeModule = "quentin";
+            };
+          };
+        };
         modeling.enable = false;
         obs-studio.enable = true;
         games = {
           enable = true;
-          force-fsr4-for-rdna3 = true;
-          gamemode.users = [ "quentin" ];
+          force-fsr4-for-rdna3 = true; # Only for AMD radeon 7000 user
+          gamemode.users = [ "quentin" ]; # Allowed user for gamemode
         };
-        team-viewer.enable = false;
-        arduino = {
+        team-viewer.enable = false; # Enable team viewerapp
+        arduino = { # Enable arduino dev kit
           enable = false;
-          users = [ "quentin" ];
+          users = [ "quentin" ]; # Allowed user for arduino access
         };
       };
     };
 
-    networking.hostName = "fw-laptop-quentin";
+    networking.hostName = "fw-laptop-16";
+
 
     fileSystems."/mnt/Games" =
     { device = "/dev/disk/by-uuid/1b35568b-4447-4c80-9880-4b359d4ecb6c";
@@ -102,27 +117,4 @@
         });
       })
     ];
-
-    programs.adb.enable = true;
-    users.users."quentin".extraGroups = [ "adbusers" ];
-
-    home-manager = {
-      useGlobalPkgs = true;
-      useUserPackages = true;
-      extraSpecialArgs = {
-          inherit self inputs pkgs pkgs-unstable;
-      };
-      users = {
-        "quentin" = import ./quentin.nix;
-      };
-    };
-
-    # mx.services.modulix-daemon = {
-    #   enable = true;
-    #  package = inputs.modulix-daemon.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    # };
-
-    # environment.systemPackages = [
-    #   pkgs.git
-    # ];
 }
