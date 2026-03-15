@@ -194,14 +194,17 @@
         "nixpkgs-unstable": "nixpkgs-unstable_2"
       },
       "locked": {
-        "lastModified": 1773613027,
-        "narHash": "sha256-F8Hg4o7/5BTRARareROw3S0XC4PFRqdeu3Nhdk9ctDU=",
-        "path": "/home/quentin/config",
-        "type": "path"
+        "lastModified": 1773614723,
+        "narHash": "sha256-QZ2MfEF2Tv6TY0yFwX7UDakQZA/QK2qUAaC3OPzupsU=",
+        "owner": "qhorgues",
+        "repo": "NixOS-config",
+        "rev": "717be82a818e6fbba87e65e33937ef566ad32887",
+        "type": "github"
       },
       "original": {
-        "path": "/home/quentin/config",
-        "type": "path"
+        "owner": "qhorgues",
+        "repo": "NixOS-config",
+        "type": "github"
       }
     },
     "root": {
