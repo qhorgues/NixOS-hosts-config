@@ -87,7 +87,6 @@
     };
 
     boot.kernelParams = [
-      "amdgpu.runpm=0" "amdgpu.bapm=0" "amdgpu.aspm=0" "pcie_aspm=off"
     ];
 
     services.udev.extraRules = ''
