@@ -65,6 +65,10 @@
           enable = true;
           force-fsr4-for-rdna3 = true; # Only for AMD radeon 7000 user
           gamemode.users = [ "quentin" ]; # Allowed user for gamemode
+          lsfg.enable = false;
+          heroic.enable = false;
+          lutris.enable = false;
+          umu.enable = false;
         };
         team-viewer.enable = false; # Enable team viewerapp
         arduino = { # Enable arduino dev kit
