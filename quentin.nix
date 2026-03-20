@@ -36,7 +36,7 @@
         mpi-lib = true;
         rust = true;
         python = true;
-        node = false;
+        node = true;
         php = true;
         sql = true;
         java = false;
