@@ -120,4 +120,12 @@
         });
       })
     ];
+
+    nix.settings = {
+      sandbox = false;
+      extra-platforms = [ "aarch64-linux" ];
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "@wheel" ];
+    };
+    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 }
