@@ -10,6 +10,7 @@
         flake_config = "default";
     };
     auto-update.enable = true;
+    desktop-environment.gnome.connection = true;
     programs = {
       firefox.enable = true; # Install firefox pre setup
       thunderbird.enable = true; # # Install thunderbird
