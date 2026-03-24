@@ -108,4 +108,5 @@
     nix.settings.trusted-public-keys = [
       "fw-laptop-16:d+GNo/L8eIPwX9Raqt7LAugodyJT2YAALYsbKu0m1O4="
     ];
+    nix.settings.trusted-users = [ "quentin" ];
 }
