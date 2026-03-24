@@ -40,7 +40,7 @@
         node = true;
         php = true;
         sql = true;
-        java = false;
+        java = true;
         gnome-dev = false;
         ci = false;
       };
