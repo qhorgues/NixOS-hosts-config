@@ -1,11 +1,11 @@
-{...}: 
+{...}:
 {
 	imports = [
 		./hardware-configuration.nix
 		#./wireguard.nix
 		./finance-app
 	];
-	
+
 	mx = {
       core.network.security-mode = false;
       bootloader.enable = false;
@@ -75,7 +75,7 @@
     };
 
     networking.hostName = "rpi-horgues";
-    
+
     users.users."fabrice"= {
       isNormalUser = true;
       initialPassword = "1234";
@@ -94,7 +94,7 @@
         addresses = true;
       };
     };
-    
+
     services.openssh = {
       enable = true;
       ports = [ 1317 ];
@@ -105,4 +105,7 @@
         AllowUsers = [ "quentin" "fabrice" ];
       };
     };
+    nix.settings.trusted-public-keys = [
+      "fw-laptop-16:d+GNo/L8eIPwX9Raqt7LAugodyJT2YAALYsbKu0m1O4="
+    ];
 }
