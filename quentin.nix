@@ -60,4 +60,6 @@
     pkgs.sushi
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
   ];
+
+  nix.settings.secret-key-files = [ "/etc/nix/signing-key.sec" ];
 }
