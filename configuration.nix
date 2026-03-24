@@ -6,7 +6,7 @@
     ];
 
     mx = {
-      core.network.security-mode = true;
+      core.network.security-mode = false;
       hardware = {
         ssd.lists = [ "/" "/mnt/Games" ]; # All mountpoint with a SSD
         framework-fan-ctrl.enable = true; # If you use framework-laptop
@@ -128,4 +128,9 @@
       trusted-users = [ "root" "@wheel" ];
     };
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
 }
