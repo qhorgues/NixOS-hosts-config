@@ -28,8 +28,8 @@
       };
       gnome = {
         enable = true;
-        scaling = 1;
-        text-scaling = 1;
+        scaling = 2;
+        text-scaling = 0.7;
       };
       services = {
         vm = {
