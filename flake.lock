@@ -86,11 +86,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774274588,
-        "narHash": "sha256-dnHvv5EMUgTzGZmA+3diYjQU2O6BEpGLEOgJ1Qe9LaY=",
+        "lastModified": 1774559029,
+        "narHash": "sha256-deix7yg3j6AhjMPnFDCmWB3f83LsajaaULP5HH2j34k=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "cf9686ba26f5ef788226843bc31fda4cf72e373b",
+        "rev": "a0bb0d11514f92b639514220114ac8063c72d0a3",
         "type": "github"
       },
       "original": {
@@ -169,36 +169,22 @@
         "type": "github"
       }
     },
-    "nixpkgs-unstable_2": {
-      "locked": {
-        "lastModified": 1774106199,
-        "narHash": "sha256-US5Tda2sKmjrg2lNHQL3jRQ6p96cgfWh3J1QBliQ8Ws=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "6c9a78c09ff4d6c21d0319114873508a6ec01655",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "qhorgues-config": {
       "inputs": {
         "coe33": "coe33",
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable_2"
+        "nixpkgs-unstable": [
+          "nixpkgs-unstable"
+        ]
       },
       "locked": {
-        "lastModified": 1774528509,
-        "narHash": "sha256-zFpwZixziAG/XqZM8bS3tmDgvIr8tA+3koozj2+8N/o=",
+        "lastModified": 1774549698,
+        "narHash": "sha256-Hp3SeyE3wOVbh2mDtOE7N9lIzr76npefjaq0S7S4bWM=",
         "owner": "qhorgues",
         "repo": "NixOS-config",
-        "rev": "1715a37390ef5cefe836f5058c339b3a4ca9611d",
+        "rev": "00e4c55fb57e5f625548a2eeaab0a15b83799f51",
         "type": "github"
       },
       "original": {

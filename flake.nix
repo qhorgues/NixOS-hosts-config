@@ -1,10 +1,12 @@
 {
-  description = "Framework Laptop 16 config";
+
+  description = "My personnal host config";
 
   inputs = {
     qhorgues-config.url = "github:qhorgues/NixOS-config";
     nixpkgs.follows = "qhorgues-config/nixpkgs";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    qhorgues-config.inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
         url = "github:nix-community/home-manager/release-25.11";
@@ -40,6 +42,5 @@
         ];
       };
     };
-
   };
 }
