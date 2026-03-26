@@ -34,6 +34,7 @@
       services = {
         vm = {
           enable = true; # Enable VM tools
+          allArchitectures = true;
           users = [ "quentin" ]; # Trusted user
         };
         docker = {
