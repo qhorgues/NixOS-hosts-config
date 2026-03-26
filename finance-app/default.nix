@@ -4,7 +4,7 @@
   imports = [
     ./postgres-finance.nix
   ];
-  
+
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 3001 ];
@@ -22,6 +22,7 @@
     "d      /srv/finance-app          0770  root  finance-app   -    -"
   ];
 
+  /*
   systemd.services.finance-app = {
     description = "Serveur Node.js";
     after       = [ "network.target" ];
@@ -42,6 +43,7 @@
       PrivateTmp           = true;
     };
   };
+  */
 
   users.users.finance-app-runner = {
     isSystemUser = true;
