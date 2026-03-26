@@ -72,7 +72,7 @@
         };
         team-viewer.enable = false; # Enable team viewerapp
         arduino = { # Enable arduino dev kit
-          enable = false;
+          enable = true;
           users = [ "quentin" ]; # Allowed user for arduino access
         };
       };
