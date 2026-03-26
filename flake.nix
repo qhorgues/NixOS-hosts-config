@@ -21,7 +21,7 @@
   {
     nixosConfigurations =
     {
-      default = let
+      fw-laptop-16 = let
         system = "x86_64-linux";
         pkgs-unstable = import nixpkgs-unstable {
           system = system;
