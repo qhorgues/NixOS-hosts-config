@@ -23,8 +23,8 @@
       };
       main-user = { # Define main user
         enable = true;
-        userName = "<username>";
-        userFullName = "<Full name>";
+        userName = "quentin";
+        userFullName = "Quentin Horgues";
       };
       gnome = {
         enable = true;
