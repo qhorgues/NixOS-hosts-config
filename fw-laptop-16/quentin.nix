@@ -35,6 +35,7 @@
         nix = true;
         cpp = true;
         mpi-lib = true;
+        openmp-lib = true;
         rust = true;
         python = true;
         node = true;
