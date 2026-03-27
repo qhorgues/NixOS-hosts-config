@@ -15,7 +15,7 @@
       firefox.enable = true; # Install firefox pre setup
       thunderbird.enable = true; # # Install thunderbird
       cryptomator.enable = true; # Install cryptomator
-      office.enable = true; # Install all office tools (libbre office, only office, latex studio)
+      office.enable = true; # Install all office tools (libre office, only office, latex studio)
       discord.enable = true; # Install discord flatpak
       element.enable = true; # Install Element flatpak
       audio-enhancer.enable = true; # Install audio enhancer with custom profiles
