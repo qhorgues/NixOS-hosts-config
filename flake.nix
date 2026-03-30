@@ -8,38 +8,20 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     qhorgues-config.inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    home-manager = {
-        url = "github:nix-community/home-manager/release-25.11";
-        inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, qhorgues-config, nixos-hardware, home-manager, ... }:
-  let
-    nixpkgsConfig = {
-      allowUnfree = true;
-    };
-  in
+  outputs = { self, qhorgues-config, nixos-hardware, ... }:
   {
     nixosConfigurations =
     {
-      fw-laptop-16 = let
+      fw-laptop-16 = qhorgues-config.lib.make-system {
         system = "x86_64-linux";
-        pkgs-unstable = import nixpkgs-unstable {
-          system = system;
-          config = nixpkgsConfig;
-        };
-      in nixpkgs.lib.nixosSystem
-      {
-        system = system;
-        specialArgs = { inherit nixos-hardware pkgs-unstable;
-          self = qhorgues-config;
-        };
         modules = [
-          qhorgues-config.nixosModules.modulix-os
-          home-manager.nixosModules.default
           ./fw-laptop-16/configuration.nix
         ];
+        specialArgs = {
+          inherit nixos-hardware;
+        };
       };
     };
   };
