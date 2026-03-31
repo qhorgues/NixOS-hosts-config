@@ -48,8 +48,6 @@
     };
   };
 
-  home.username = "quentin";
-  home.homeDirectory = "/home/quentin";
   home.keyboard = {
     layout = "fr";
     variant = "fr";

@@ -21,6 +21,11 @@
         };
         bluetooth.enable = true;
       };
+      main-user = { # Define main user
+        enable = true;
+        userName = "quentin";
+        userFullName = "Quentin Horgues";
+      };
       gnome = {
         enable = true;
         scaling = 2;
