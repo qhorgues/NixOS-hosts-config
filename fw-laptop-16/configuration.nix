@@ -3,6 +3,7 @@
     imports = [
       nixos-hardware.nixosModules.framework-16-7040-amd
       ./hardware-configuration.nix
+      # ./vpn.nix
     ];
 
     mx = {
@@ -64,6 +65,7 @@
         obs-studio.enable = true;
         games = {
           enable = true;
+          aggressive = true;
           force-fsr4-for-rdna3 = true; # Only for AMD radeon 7000 user
           gamemode.users = [ "quentin" ]; # Allowed user for gamemode
           lsfg.enable = false;
