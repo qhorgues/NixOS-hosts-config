@@ -58,6 +58,7 @@
   home.packages = [
     pkgs.sushi
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
+    qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.kiwix
   ];
 
   nix.settings.secret-key-files = [ "/etc/nix/signing-key.sec" ];
