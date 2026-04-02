@@ -48,7 +48,7 @@
           enable = true; # Enable ollama tools
           open-webui.enable = true;
         };
-        printing.enable = true;
+        printing.enable = false;
         ios-connect.enable = false; # Enable IOS connection tools
       };
       programs = { # Enable some system app
