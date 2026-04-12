@@ -7,7 +7,7 @@
   mx = {
     update = {
         flake_path = "/home/quentin/config";
-        flake_config = "default";
+        flake_config = "fw-laptop-16";
     };
     auto-update.enable = true;
     desktop-environment.gnome.connection = true;
@@ -56,9 +56,8 @@
   home.file.".config/BOE_CQ_______NE160QDM_NZ6.icm".source = ./home-manager/BOE_CQ_______NE160QDM_NZ6.icm;
 
   home.packages = [
-    pkgs.sushi
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
-    qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.kiwix
+    # qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.kiwix
   ];
 
   nix.settings.secret-key-files = [ "/etc/nix/signing-key.sec" ];
