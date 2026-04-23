@@ -36,15 +36,15 @@
       dev = {
         enable = true;
         nix = true;
-        cpp = true;
-        mpi-lib = true;
-        openmp-lib = true;
+        cpp = false;
+        mpi-lib = false;
+        openmp-lib = false;
         rust = true;
         python = true;
         node = true;
         php = true;
         sql = true;
-        java = true;
+        java = false;
         gnome-dev = false;
         ci = false;
       };
