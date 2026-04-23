@@ -42,7 +42,7 @@
           users = [ "quentin" ]; # Trusted user
         };
         lamp.enable = true; # Enable Apache/PHP/MariaDB stack
-        postgresql.enable = false; # Enable postgres SQL
+        postgresql.enable = true; # Enable postgres SQL
         llm = {
           enable = true; # Enable ollama tools
           open-webui.enable = true;
