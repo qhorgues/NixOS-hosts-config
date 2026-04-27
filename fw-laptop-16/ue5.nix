@@ -21,9 +21,9 @@ let
   app = distroboxApp.mkApp {
     name           = "ue5";
     displayName    = "Unreal Engine 5";
-    containerName  = cfg.containerName;
     containerImage = cfg.containerImage;  # full image name, e.g. "ubuntu:22.04"
     installDir     = cfg.ue5InstallDir;
+    environment    = "DRI_PRIME=0";
     binaryRelPath  = "Engine/Binaries/Linux/UnrealEditor";
     icon           = ue5Icon;
     nvidia         = cfg.nvidia;
@@ -69,6 +69,7 @@ let
             sudo apt-get install -y -qq \
               libglu1-mesa libgl1-mesa-dri \
               libvulkan1 libvulkan-dev vulkan-tools vulkan-validationlayers \
+              mesa-vulkan-drivers libgl1-mesa-dri \
               libx11-6 libxcursor1 libxrandr2 libxinerama1 libxi6 \
               libxext6 libxfixes3 libxss1 libxcb1 libxcomposite1 \
               libxdamage1 libxkbcommon0 \
@@ -78,6 +79,7 @@ let
               libdbus-1-3 libexpat1 libpango-1.0-0 libcairo2 libgbm1 libegl1 \
               mono-runtime libmono-system-core4.0-cil \
               dotnet-runtime-6.0 libicu70 \
+              libnss3 libasound2t64 \
               openssl ca-certificates libssl3 patchelf
 INNER
         '';
@@ -90,8 +92,8 @@ INNER
       selectZipTitle       = "Select the Unreal Engine 5 archive (.zip)";
       doneText             = "<b>Installation complete!</b>\n\nUnreal Engine 5 is ready.\nThe editor will now start.";
       errorBinaryNotFound  = "Extraction failed or the archive does not contain a prebuilt Linux editor.\n\nPlease download the <b>Linux</b> version from the Epic Games website.";
-      uninstallConfirmText = "This will permanently remove:\n\n  • Unreal Engine 5 files in <tt>${cfg.ue5InstallDir}</tt>\n  • The dedicated container <b>${cfg.containerName}</b>\n\nAre you sure?";
-      uninstalledText      = "<b>Unreal Engine 5 has been uninstalled.</b>\n\nThe container <b>${cfg.containerName}</b> and all files in\n<tt>${cfg.ue5InstallDir}</tt> have been removed.\n\nClick the icon again to reinstall.";
+      uninstallConfirmText = "This will permanently remove:\n\n  • Unreal Engine 5 files in <tt>${cfg.ue5InstallDir}</tt>\n  • The dedicated container <b>distrobox-app-ue5</b>\n\nAre you sure?";
+      uninstalledText      = "<b>Unreal Engine 5 has been uninstalled.</b>\n\nThe container <b>distrobox-app-ue5</b> and all files in\n<tt>${cfg.ue5InstallDir}</tt> have been removed.\n\nClick the icon again to reinstall.";
     };
 
     # ── .desktop metadata ──────────────────────────────────────────────────
@@ -110,21 +112,16 @@ in
   options.programs.distrobox-ue5 = {
     enable = lib.mkEnableOption "Unreal Engine 5 via a dedicated Distrobox container";
 
-    containerName = lib.mkOption {
-      type        = lib.types.str;
-      default     = "ue5";
-      description = "Name of the dedicated distrobox container for UE5.";
-    };
 
     containerImage = lib.mkOption {
       type        = lib.types.str;
-      default     = "ubuntu:22.04";
+      default     = "ubuntu:26.04";
       description = ''
         Full OCI image name used to create the container.
         Ubuntu 22.04 LTS is recommended for UE5 compatibility.
         Any image available to Podman/Docker can be used.
       '';
-      example = "ubuntu:22.04";
+      example = "ubuntu:26.04";
     };
 
     nvidia = lib.mkOption {
@@ -175,15 +172,25 @@ in
     # Install the initial .desktop at first graphical login.
     # The launcher overwrites it with the definitive version
     # (real icon, no "click to install" suffix) once UE5 is set up.
-    system.userActivationScripts.distrobox-ue5-desktop = ''
-      APPS="$HOME/.local/share/applications"
-      DEST="$APPS/ue5.desktop"
-      mkdir -p "$APPS"
-      if [ ! -f "$DEST" ]; then
-        cp ${app.initialDesktop} "$DEST"
-        chmod 644 "$DEST"
-        ${pkgs.desktop-file-utils}/bin/update-desktop-database "$APPS" 2>/dev/null || true
-      fi
-    '';
+    systemd.user.services.distrobox-ue5-desktop = {
+      description = "Install initial Unreal Engine 5 .desktop entry";
+      wantedBy    = [ "graphical-session.target" ];
+      after       = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type            = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = pkgs.writeShellScript "ue5-install-desktop" ''
+          APPS="$HOME/.local/share/applications"
+          DEST="$APPS/ue5.desktop"
+          mkdir -p "$APPS"
+          # Don't overwrite a .desktop already written by the launcher
+          if [ ! -f "$DEST" ]; then
+            cp ${app.initialDesktop} "$DEST"
+            chmod 644 "$DEST"
+            ${pkgs.desktop-file-utils}/bin/update-desktop-database "$APPS" 2>/dev/null || true
+          fi
+        '';
+      };
+    };
   };
 }

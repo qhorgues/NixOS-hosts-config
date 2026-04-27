@@ -31,8 +31,7 @@ in
   # Required parameters:
   #   name              str       short identifier (e.g. "ue5")
   #   displayName       str       name shown in popups (e.g. "Unreal Engine 5")
-  #   containerName     str       distrobox container name (must be unique per app)
-  #   containerImage    str       full OCI image name, e.g. "ubuntu:22.04"
+    #   containerImage    str       full OCI image name, e.g. "ubuntu:22.04"
   #                               or "registry.fedoraproject.org/fedora:39"
   #   installDir        str       installation directory, may contain $HOME
   #   binaryRelPath     str       path to the executable relative to installDir
@@ -42,6 +41,8 @@ in
   #
   # Optional parameters:
   #   nvidia                    false   pass --nvidia to distrobox create
+  #   init                      false   pass --init to distrobox create (only for
+  #                                     images that ship an init system)
   #   additionalContainerPkgs   []      packages passed to --additional-packages
   #   icon                      null    pkgs.writeText SVG, or null for fallback
   #   zipValidator              null    grep pattern in `unzip -l` to validate zip
@@ -63,12 +64,13 @@ in
   mkApp =
     { name
     , displayName
-    , containerName
     , containerImage
     , installDir
     , binaryRelPath
     , installSteps
+    , environment             ? ""
     , nvidia                  ? false
+    , init                    ? false
     , additionalContainerPkgs ? []
     , icon                    ? null
     , zipValidator            ? null
@@ -78,14 +80,19 @@ in
     }:
 
     let
+      # The container name is derived solely from `name` to guarantee uniqueness
+      # per app and avoid collisions with other distrobox containers.
+      # Users never set this directly — they control it via `name`.
+      safeContainerName = "distrobox-app-${name}";
+
       # ── UI defaults ────────────────────────────────────────────────────────
       ui' = {
         welcomeText           = "<b>Welcome to the ${displayName} installer</b>\n\nSelect the <b>.zip</b> archive to install.\n\n<small>Destination: <tt>${installDir}</tt></small>";
         selectZipTitle        = "Select the ${displayName} archive (.zip)";
         doneText              = "<b>Installation complete!</b>\n\n${displayName} is ready.";
         errorBinaryNotFound   = "Installation failed.\nBinary not found after install.";
-        uninstallConfirmText  = "This will remove:\n\n  • The <b>${displayName}</b> files in <tt>${installDir}</tt>\n  • The dedicated container <b>${containerName}</b>\n\nAre you sure?";
-        uninstalledText       = "<b>${displayName} has been uninstalled.</b>\n\nThe container <b>${containerName}</b> and all files in\n<tt>${installDir}</tt> have been removed.";
+        uninstallConfirmText  = "This will remove:\n\n  • The <b>${displayName}</b> files in <tt>${installDir}</tt>\n  • The dedicated container <b>${safeContainerName}</b>\n\nAre you sure?";
+        uninstalledText       = "<b>${displayName} has been uninstalled.</b>\n\nThe container <b>${safeContainerName}</b> and all files in\n<tt>${installDir}</tt> have been removed.";
       } // ui;
 
       # ── Desktop defaults ───────────────────────────────────────────────────
@@ -135,18 +142,20 @@ in
         + lib.optionalString (desktop'.keywords != "") "Keywords=${desktop'.keywords}\n";
 
       # ── distrobox create flags ─────────────────────────────────────────────
+      # --nvidia is only passed when explicitly requested; the flag will fail
+      # on machines without an Nvidia GPU or the nvidia-container-toolkit.
       distroboxCreateFlags =
           "--name \"$CONTAINER\""
         + " --image \"${containerImage}\""
         + lib.optionalString nvidia " --nvidia"
-        + " --init"
+        + lib.optionalString init   " --init"
         + lib.optionalString
             (additionalContainerPkgs != [])
             " --additional-packages \"${lib.concatStringsSep " " additionalContainerPkgs}\"";
 
       # ── Shared env block ───────────────────────────────────────────────────
       sharedEnv = ''
-        export CONTAINER="${containerName}"
+        export CONTAINER="${safeContainerName}"
         export INSTALL_DIR="${installDir}"
         export BINARY="$INSTALL_DIR/${binaryRelPath}"
         export SENTINEL="$INSTALL_DIR/.${name}_installed"
@@ -172,20 +181,57 @@ in
 
       # ── Install procedure ──────────────────────────────────────────────────
       installProcedure = ''
-        # Create the dedicated container if it does not exist yet
-        if ! ${pkgs.distrobox}/bin/distrobox list 2>/dev/null | grep -q "^$CONTAINER\b"; then
-          zinfo "Setting up a dedicated container for ${displayName}.\n\nPulling image <b>${containerImage}</b>…\n<small>This may take a few minutes.</small>"
-
-          zpulse "$_DISPLAY_NAME" "Creating container from ${containerImage}…" \
-            ${pkgs.distrobox}/bin/distrobox create ${distroboxCreateFlags}
-
-          if ! ${pkgs.distrobox}/bin/distrobox list 2>/dev/null | grep -q "^$CONTAINER\b"; then
-            zerror "Failed to create the Distrobox container.\nMake sure Podman is installed and running."
-            exit 1
-          fi
+        # Sanity check: podman must be reachable before anything else
+        if ! ${pkgs.podman}/bin/podman info >/dev/null 2>&1; then
+          zerror "Podman is not available or not running.\nMake sure virtualisation.podman.enable = true in your NixOS configuration."
+          exit 1
         fi
 
-        # Welcome popup + zip selection
+        # Create the dedicated container if it does not exist yet
+        # podman container exists returns 0 if the container exists (exact name match)
+        if ! ${pkgs.podman}/bin/podman container exists "$CONTAINER" 2>/dev/null; then
+
+          _IMAGE="${containerImage}"
+          _RC_FILE=$(mktemp)
+
+          # ── Step 1: pull the image — blocking with pulsed bar ──────────────
+          # Exit code is captured via a tempfile because the pipe to zenity
+          # runs in a subshell where $PIPESTATUS is unavailable.
+          # zenity --no-cancel keeps the bar non-dismissable, ensuring the
+          # step is truly blocking from the user's perspective.
+          (
+            ${pkgs.podman}/bin/podman pull "$_IMAGE" 2>&1
+            echo $? > "$_RC_FILE"
+          ) | ${pkgs.zenity}/bin/zenity --progress \
+              --title="$_DISPLAY_NAME" \
+              --text="Pulling image <b>$_IMAGE</b>…\n<small>This may take a few minutes.</small>" \
+              --pulsate --auto-close --no-cancel --width=500 2>/dev/null || true
+
+          if [ "$(cat "$_RC_FILE" 2>/dev/null)" != "0" ]; then
+            rm -f "$_RC_FILE"
+            zerror "Failed to pull image <b>$_IMAGE</b>.\nCheck your internet connection and that the image name is correct."
+            exit 1
+          fi
+
+          # ── Step 2: create the container (image already cached, fast) ─────
+          (
+            ${pkgs.distrobox}/bin/distrobox create ${distroboxCreateFlags} 2>&1
+            echo $? > "$_RC_FILE"
+          ) | ${pkgs.zenity}/bin/zenity --progress \
+              --title="$_DISPLAY_NAME" \
+              --text="Initialising container <b>$CONTAINER</b>…" \
+              --pulsate --auto-close --no-cancel --width=500 2>/dev/null || true
+
+          if [ "$(cat "$_RC_FILE" 2>/dev/null)" != "0" ]; then
+            rm -f "$_RC_FILE"
+            zerror "Failed to create the Distrobox container.\nCheck the logs with: journalctl -xe"
+            exit 1
+          fi
+
+          rm -f "$_RC_FILE"
+        fi
+
+                # Welcome popup + zip selection
         ${pkgs.zenity}/bin/zenity --info \
           --title="$_DISPLAY_NAME — Install" \
           --window-icon="$_ICON" \
@@ -267,7 +313,7 @@ DESKTOP
           exit 0
         fi
 
-        zpulse "$_DISPLAY_NAME" "Removing container ${containerName}…" \
+        zpulse "$_DISPLAY_NAME" "Removing container ${safeContainerName}…" \
           ${pkgs.distrobox}/bin/distrobox rm --force "$CONTAINER" 2>/dev/null || true
 
         zpulse "$_DISPLAY_NAME" "Removing files in ${installDir}…" \
@@ -304,7 +350,7 @@ DESKTOP
         fi
 
         if [ $# -gt 0 ]; then
-          exec ${pkgs.distrobox}/bin/distrobox enter "$CONTAINER" -- "$BINARY" "$@"
+          exec ${pkgs.distrobox}/bin/distrobox enter "$CONTAINER" -- ${environment} "$BINARY" "$@"
         fi
 
         CHOICE=$(${pkgs.zenity}/bin/zenity --list \
@@ -328,7 +374,7 @@ DESKTOP
 
       # ── Shell shortcut: drop into the container ────────────────────────────
       enterScript = pkgs.writeShellScriptBin "${name}" ''
-        exec ${pkgs.distrobox}/bin/distrobox enter "${containerName}" -- "''${@:-bash}"
+        exec ${pkgs.distrobox}/bin/distrobox enter "${safeContainerName}" -- "''${@:-bash}"
       '';
 
       # ── Initial .desktop placed by the systemd user service ───────────────
