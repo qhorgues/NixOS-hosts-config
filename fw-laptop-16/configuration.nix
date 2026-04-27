@@ -3,7 +3,6 @@
     imports = [
       nixos-hardware.nixosModules.framework-16-7040-amd
       ./hardware-configuration.nix
-      ./ue5.nix
     ];
 
     mx = {
