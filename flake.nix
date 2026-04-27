@@ -13,9 +13,12 @@
   outputs = { self, qhorgues-config, nixos-hardware, ... }:
   {
     nixosConfigurations =
+    let
+      system = "x86_64-linux";
+    in
     {
       fw-laptop-16 = qhorgues-config.lib.make-system {
-        system = "x86_64-linux";
+        system = system;
         modules = [
           ./fw-laptop-16/configuration.nix
         ];
