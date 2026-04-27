@@ -60,6 +60,7 @@
 
   home.packages = [
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
+    pkgs.obsidian
     # qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.kiwix
   ];
 
