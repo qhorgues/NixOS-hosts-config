@@ -4,7 +4,6 @@
       ssh_connections = [
           {
             host = "rpi-horgues";
-            hostname = "rpi-horgues";
             project = [
               {
                 paths = [
@@ -15,7 +14,6 @@
           }
           {
             host = "rpi-quentin-proxy";
-            hostname = "rpi-quentin-proxy";
             project = [
               {
                 paths = [
