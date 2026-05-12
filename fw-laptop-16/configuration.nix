@@ -38,14 +38,14 @@
           users = [ "quentin" ]; # Trusted user
         };
         docker = {
-          enable = true; # Enable docker tools
+          enable = false; # Enable docker tools
           users = [ "quentin" ]; # Trusted user
         };
-        lamp.enable = true; # Enable Apache/PHP/MariaDB stack
-        postgresql.enable = true; # Enable postgres SQL
+        lamp.enable = false; # Enable Apache/PHP/MariaDB stack
+        postgresql.enable = false; # Enable postgres SQL
         llm = {
           enable = true; # Enable ollama tools
-          open-webui.enable = true;
+          open-webui.enable = false;
         };
         printing.enable = false;
         ios-connect.enable = false; # Enable IOS connection tools
@@ -61,7 +61,7 @@
           };
         };
         modeling.enable = false;
-        obs-studio.enable = true;
+        obs-studio.enable = false;
         games = {
           enable = true;
           cachyos-kernel.enable = true;
@@ -75,7 +75,7 @@
         };
         team-viewer.enable = false; # Enable team viewerapp
         arduino = { # Enable arduino dev kit
-          enable = true;
+          enable = false;
           users = [ "quentin" ]; # Allowed user for arduino access
         };
       };

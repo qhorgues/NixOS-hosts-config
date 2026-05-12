@@ -24,28 +24,28 @@
         ollamaNumberToken = 100000;
       };
       ssh.enable = true; # Install ssh client
-      vscode.enable = true; # Install custom VS Code
+      vscode.enable = false; # Install custom VS Code
       kdrive.enable = true; # Install kdrive
       graphism.enable = true; # Install graphism tools (GIMP, Krita, Inkscape)
       git.enable = true; # Install git with config
       vim.enable = false; # Install vim
       linux-base-tools.enable = true; # Install linux base tools (htop, fastfetch, ...)
-      winboat.enable = true; # Install Winboat /!\ NEED ENABLE DOCKER ON SYSTEM CONFIG
+      winboat.enable = false; # Install Winboat /!\ NEED ENABLE DOCKER ON SYSTEM CONFIG
 
       # Enable dev tools
       dev = {
         enable = true;
         nix = true;
-        cpp = false;
+        cpp = true;
         mpi-lib = false;
         openmp-lib = false;
         rust = true;
         python = true;
         node = true;
-        php = true;
+        php = false;
         sql = true;
         java = false;
-        gnome-dev = false;
+        gnome-dev = true;
         ci = false;
       };
     };
