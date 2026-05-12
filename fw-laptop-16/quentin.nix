@@ -58,9 +58,57 @@
 
   home.file.".config/BOE_CQ_______NE160QDM_NZ6.icm".source = ./home-manager/BOE_CQ_______NE160QDM_NZ6.icm;
 
-  home.packages = [
+  home.packages = let
+    mkGameConfigSwitcher = { ... } @ args: qhorgues-config.lib.mkGameConfigSwitcher ({
+      inherit pkgs;
+      saveBase = "$HOME/kDrive/Documents/Loisirs/Jeux";
+      steamLibrary = "/mnt/Games/SteamLibrary";
+    } // args);
+
+  in
+  [
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
     pkgs.obsidian
+    pkgs.filezilla
+    pkgs.bitwarden-desktop
+
+    (mkGameConfigSwitcher {
+      game = "aoe4";
+      savePath = "AOE4/Config-FW-16";
+      steamId = "1466860";
+      files = [
+        {
+          fileName = "configuration_system.lua";
+          winPath = "users/steamuser/Documents/My Games/Age of Empires IV";
+        }
+      ];
+    })
+    (mkGameConfigSwitcher {
+      game = "coe33";
+      savePath = "Clair-Obscur_Expedition33/Config-FW-16";
+      steamId = "1903340";
+      files = [
+        {
+          fileName = "GameUserSettings.ini";
+          winPath = "users/steamuser/AppData/Local/Sandfall/Saved/Config/Windows";
+        }
+      ];
+    })
+    (mkGameConfigSwitcher {
+      game = "ml";
+      savePath = "ManorLord/Config-FW-16";
+      steamId = "1363080";
+      files = [
+        {
+          fileName = "GameUserSettings.ini";
+          winPath = "users/steamuser/AppData/Local/ManorLords/Saved/Config/Windows";
+        }
+        {
+          fileName = "UserSettings.ini";
+          winPath = "users/steamuser/AppData/Local/ManorLords/Saved/Config/Windows";
+        }
+      ];
+    })
     # qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.kiwix
   ];
 
