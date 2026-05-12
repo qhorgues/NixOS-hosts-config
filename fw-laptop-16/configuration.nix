@@ -72,6 +72,14 @@
           heroic.enable = false;
           lutris.enable = false;
           umu.enable = false;
+
+          gamescopeSession = {
+            enable = true;
+            screen = {
+              width = 2560;
+              height = 1440;
+            };
+          };
         };
         team-viewer.enable = false; # Enable team viewerapp
         arduino = { # Enable arduino dev kit
