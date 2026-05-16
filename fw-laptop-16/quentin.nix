@@ -19,10 +19,7 @@
       discord.enable = true; # Install discord flatpak
       element.enable = true; # Install Element flatpak
       audio-enhancer.enable = true; # Install audio enhancer with custom profiles
-      zed-editor = {
-        enable = true; # Install custom zed editor
-        ollamaNumberToken = 100000;
-      };
+      zed-editor.enable = true; # Install custom zed editor
       ssh.enable = true; # Install ssh client
       vscode.enable = false; # Install custom VS Code
       kdrive.enable = true; # Install kdrive

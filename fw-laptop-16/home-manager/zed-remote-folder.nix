@@ -4,7 +4,7 @@
       ssh_connections = [
           {
             host = "rpi-horgues";
-            project = [
+            projects = [
               {
                 paths = [
                     "/etc/nixos"
@@ -14,7 +14,7 @@
           }
           {
             host = "rpi-quentin-proxy";
-            project = [
+            projects = [
               {
                 paths = [
                     "~/app-backend"
