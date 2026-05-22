@@ -1,4 +1,4 @@
-{ nixos-hardware, ... }:
+{ nixos-hardware, pkgs, ... }:
 {
     imports = [
       nixos-hardware.nixosModules.framework-16-7040-amd
@@ -20,6 +20,12 @@
           #  AMD: "rdna4", "gcn-4-gen", "gcn-1-gen")
         };
         bluetooth.enable = true;
+      };
+      kernel = {
+        cachyos-kernel = {
+          enable = true;
+          package = pkgs.cachyosKernels.linux-cachyos-bore-zen4;
+        };
       };
       main-user = { # Define main user
         enable = true;
@@ -64,8 +70,7 @@
         obs-studio.enable = false;
         games = {
           enable = true;
-          cachyos-kernel.enable = true;
-          latest-unstable-mesa-driver.enable = true;
+          latest-unstable-mesa-driver.enable = false;
           force-fsr4-for-rdna3 = true; # Only for AMD radeon 7000 user
           gamemode.users = [ "quentin" ]; # Allowed user for gamemode
           lsfg.enable = false;
