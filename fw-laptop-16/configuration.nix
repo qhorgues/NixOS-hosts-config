@@ -152,9 +152,4 @@
       trusted-users = [ "root" "@wheel" ];
     };
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-    services.avahi = {
-      enable = true;
-      nssmdns4 = true;
-      openFirewall = true;
-    };
 }
