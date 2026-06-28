@@ -65,10 +65,11 @@
   in
   [
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
-    pkgs.obsidian
-    pkgs.filezilla
-    pkgs.bitwarden-desktop
-
+    (qhorgues-config.lib.igpu-launch {
+      inherit pkgs;
+      igpuId  = "1002:15bf";
+      igpuNumber = "1";
+    })
     (mkGameConfigSwitcher {
       game = "aoe4";
       savePath = "AOE4/Config-FW-16";
@@ -88,6 +89,17 @@
         {
           fileName = "GameUserSettings.ini";
           winPath = "users/steamuser/AppData/Local/Sandfall/Saved/Config/Windows";
+        }
+      ];
+    })
+    (mkGameConfigSwitcher {
+      game = "witcher3";
+      savePath = "Witcher3/Config-FW-16";
+      steamId = "292030";
+      files = [
+        {
+          fileName = "dx12user.settings";
+          winPath = "users/steamuser/Documents/The Witcher 3";
         }
       ];
     })
