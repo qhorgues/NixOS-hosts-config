@@ -51,7 +51,8 @@
         lamp.enable = false; # Enable Apache/PHP/MariaDB stack
         postgresql.enable = false; # Enable postgres SQL
         llm = {
-          enable = true; # Enable ollama tools
+          enable = true;
+          ramOverflow.enable = true;
           open-webui.enable = false;
           modelsPreset = {
             "gemma4:e4b" = {
