@@ -1,9 +1,11 @@
-{ nixos-hardware, pkgs, ... }:
+{ nixos-hardware, lib, pkgs, ... }:
 {
     imports = [
       nixos-hardware.nixosModules.framework-16-7040-amd
       ./hardware-configuration.nix
     ];
+
+    time.timeZone = lib.mkForce "Asia/Ho_Chi_Minh";
 
     mx = {
       core.network.security-mode = false;
