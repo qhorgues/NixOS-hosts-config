@@ -99,6 +99,21 @@
         };
         printing.enable = false;
         ios-connect.enable = false; # Enable IOS connection tools
+        remote-desktop = { # Sunshine game streaming server
+          enable = true;
+          app = [
+            {
+              name = "Smartphone";
+              steam = true;
+              output = "DP-8";
+            }
+            {
+              name = "Laptop 13";
+              steam = true;
+              output = "DP-9";
+            }
+          ];
+        };
       };
       programs = { # Enable some system app
         home-manager = {
@@ -138,6 +153,25 @@
           enable = false;
           users = [ "quentin" ]; # Allowed user for arduino access
         };
+      };
+      virtual-display = {
+        enable = true;
+        displays = [
+          {
+            videoOutput = "DP-8";
+            width = 2404;
+            height = 1080;
+            refreshRate = 120;
+            displayName = "Smartphone";
+          }
+          {
+            videoOutput = "DP-9";
+            width = 1920;
+            height = 1080;
+            refreshRate = 60;
+            displayName = "Laptop13";
+          }
+        ];
       };
     };
 
