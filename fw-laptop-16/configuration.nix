@@ -216,4 +216,20 @@
       trusted-users = [ "root" "@wheel" ];
     };
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+    services.keyd = {
+      enable = true;
+      keyboards.default = {
+        ids = [ "*" ];
+        settings = {
+          main = {
+            rightalt = "layer(altgr)";
+          };
+          altgr = {
+            "1" = "e";
+            "S-1" = "E";
+          };
+        };
+      };
+    };
 }
