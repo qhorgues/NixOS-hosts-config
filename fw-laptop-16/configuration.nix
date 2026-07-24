@@ -112,7 +112,7 @@
             {
               name = "Laptop 13";
               steam = true;
-              output = "DP-9";
+              output = "DP-7";
             }
           ];
         };
@@ -160,18 +160,18 @@
         enable = true;
         displays = [
           {
+            videoOutput = "DP-7";
+            width = 1920;
+            height = 1080;
+            refreshRate = 60;
+            displayName = "Laptop13";
+          }
+          {
             videoOutput = "DP-8";
             width = 2404;
             height = 1080;
             refreshRate = 120;
             displayName = "Smartphone";
-          }
-          {
-            videoOutput = "DP-9";
-            width = 1920;
-            height = 1080;
-            refreshRate = 60;
-            displayName = "Laptop13";
           }
         ];
       };
