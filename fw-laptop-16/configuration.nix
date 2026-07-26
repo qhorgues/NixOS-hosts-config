@@ -202,16 +202,6 @@
         ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0018", ATTR{power/wakeup}="disabled"
     '';
 
-    boot.loader.limine = {
-      extraEntries = ''
-        /Windows
-          comment: Microsoft Windows
-          protocol: efi
-          path: boot():/EFI/Microsoft/Boot/bootmgfw.efi
-            '';
-    };
-
-
     nix.settings = {
       extra-platforms = [ "aarch64-linux" ];
       experimental-features = [ "nix-command" "flakes" ];
