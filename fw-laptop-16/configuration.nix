@@ -34,10 +34,12 @@
         userName = "quentin";
         userFullName = "Quentin Horgues";
       };
-      gnome = {
-        enable = true;
-        scaling = 2;
-        text-scaling = 0.7;
+      desktop = {
+        environment = "gnome"; # "none"/"gnome"/"plasma"/"lxqt"
+        gnome = {
+          scaling = 2;
+          text-scaling = 0.7;
+        };
       };
       fonts.enable = true;
       services = {
