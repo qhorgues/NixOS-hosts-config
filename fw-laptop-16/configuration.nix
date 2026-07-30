@@ -171,6 +171,7 @@
             width = 2404;
             height = 1080;
             refreshRate = 120;
+            enableHdr = true;
             displayName = "Smartphone";
           }
         ];
