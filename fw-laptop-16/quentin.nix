@@ -10,7 +10,10 @@
         flake_config = "fw-laptop-16";
     };
     auto-update.enable = true;
-    desktop-environment.gnome.connection = true;
+    desktop-environment.gnome = {
+      connection = false;
+      live-wallpaper = true;
+    };
     programs = {
       firefox.enable = true; # Install firefox pre setup
       thunderbird.enable = true; # # Install thunderbird
