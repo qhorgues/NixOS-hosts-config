@@ -5,13 +5,6 @@
       ./hardware-configuration.nix
     ];
 
-    services.hardware.openrgb = {
-      enable = true;
-      package = pkgs.openrgb-with-all-plugins;
-      motherboard = "amd";
-      server.port = 6742;
-    };
-
     time.timeZone = lib.mkForce "Asia/Ho_Chi_Minh";
 
     mx = {
@@ -136,7 +129,7 @@
             };
           };
         };
-        modeling.enable = false;
+        modeling.enable = true;
         obs-studio.enable = false;
         games = {
           enable = true;
