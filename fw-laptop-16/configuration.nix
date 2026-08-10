@@ -44,6 +44,7 @@
         gnome = {
           scaling = 2;
           text-scaling = 0.7;
+          remote-desktop = false;
         };
       };
       fonts.enable = true;
