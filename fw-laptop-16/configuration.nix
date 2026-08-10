@@ -7,6 +7,11 @@
 
     time.timeZone = lib.mkForce "Asia/Ho_Chi_Minh";
 
+    boot.kernelParams = lib.mkAfter [
+      "amdgpu.dcdebugmask=0x40010"
+      "amdgpu.abmlevel=0"
+    ];
+
     mx = {
       core.network.security-mode = false;
       hardware = {
@@ -191,9 +196,6 @@
     { device = "/dev/disk/by-uuid/1b35568b-4447-4c80-9880-4b359d4ecb6c";
         fsType = "ext4";
     };
-
-    boot.kernelParams = [
-    ];
 
     services.udev.extraRules = ''
         # Framework Laptop 16 Keyboard Module - ANSI
