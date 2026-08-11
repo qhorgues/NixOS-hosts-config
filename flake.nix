@@ -13,14 +13,20 @@
   outputs = { self, qhorgues-config, nixos-hardware, ... }:
   {
     nixosConfigurations =
-    let
-      system = "x86_64-linux";
-    in
     {
       fw-laptop-16 = qhorgues-config.lib.make-system {
-        system = system;
+        system = "x86_64-linux";
         modules = [
           ./fw-laptop-16/configuration.nix
+        ];
+        specialArgs = {
+          inherit nixos-hardware;
+        };
+      };
+      desktop-acer-n50 = qhorgues-config.lib.make-system {
+        system = "x86_64-linux";
+        modules = [
+          ./desktop-acer-n50/configuration.nix
         ];
         specialArgs = {
           inherit nixos-hardware;
