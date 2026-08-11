@@ -5,8 +5,6 @@
       ./hardware-configuration.nix
     ];
 
-    time.timeZone = lib.mkForce "Asia/Ho_Chi_Minh";
-
     boot.kernelParams = lib.mkAfter [
       "amdgpu.dcdebugmask=0x40010"
       "amdgpu.abmlevel=0"
@@ -218,20 +216,4 @@
       trusted-users = [ "root" "@wheel" ];
     };
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-    services.keyd = {
-      enable = true;
-      keyboards.default = {
-        ids = [ "*" ];
-        settings = {
-          main = {
-            rightalt = "layer(altgr)";
-          };
-          altgr = {
-            "1" = "e";
-            "S-1" = "E";
-          };
-        };
-      };
-    };
 }
