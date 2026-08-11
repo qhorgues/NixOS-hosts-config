@@ -56,69 +56,8 @@
     variant = "fr";
   };
 
-  home.packages = let
-    mkGameConfigSwitcher = { ... } @ args: qhorgues-config.lib.mkGameConfigSwitcher ({
-      inherit pkgs;
-      saveBase = "$HOME/kDrive/Documents/Loisirs/Jeux";
-      steamLibrary = "/mnt/Games/SteamLibrary";
-    } // args);
-
-  in
+  home.packages =
   [
     qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.coe33
-    (qhorgues-config.lib.igpu-launch {
-      inherit pkgs;
-      igpuId  = "1002:15bf";
-      igpuNumber = "1";
-    })
-    (mkGameConfigSwitcher {
-      game = "aoe4";
-      savePath = "AOE4/Config-FW-16";
-      steamId = "1466860";
-      files = [
-        {
-          fileName = "configuration_system.lua";
-          winPath = "users/steamuser/Documents/My Games/Age of Empires IV";
-        }
-      ];
-    })
-    (mkGameConfigSwitcher {
-      game = "coe33";
-      savePath = "Clair-Obscur_Expedition33/Config-FW-16";
-      steamId = "1903340";
-      files = [
-        {
-          fileName = "GameUserSettings.ini";
-          winPath = "users/steamuser/AppData/Local/Sandfall/Saved/Config/Windows";
-        }
-      ];
-    })
-    (mkGameConfigSwitcher {
-      game = "witcher3";
-      savePath = "Witcher3/Config-FW-16";
-      steamId = "292030";
-      files = [
-        {
-          fileName = "dx12user.settings";
-          winPath = "users/steamuser/Documents/The Witcher 3";
-        }
-      ];
-    })
-    (mkGameConfigSwitcher {
-      game = "ml";
-      savePath = "ManorLord/Config-FW-16";
-      steamId = "1363080";
-      files = [
-        {
-          fileName = "GameUserSettings.ini";
-          winPath = "users/steamuser/AppData/Local/ManorLords/Saved/Config/Windows";
-        }
-        {
-          fileName = "UserSettings.ini";
-          winPath = "users/steamuser/AppData/Local/ManorLords/Saved/Config/Windows";
-        }
-      ];
-    })
-    # qhorgues-config.packages.${pkgs.stdenv.hostPlatform.system}.kiwix
   ];
 }
