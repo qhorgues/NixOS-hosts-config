@@ -94,11 +94,12 @@
               hf-repo = "bartowski/Qwen_Qwen3.5-9B-GGUF";
               hf-file = "Qwen_Qwen3.5-9B-Q4_K_M.gguf";
               alias    = "qwen3.5:9b";
-              ctx-size = "262144";
-              temp     = "1.0";
+              ctx-size = "524288";
+              temp     = "0.6";
               top-p    = "0.95";
-              min-p    = "0.01";
-              top-k    = "40";
+              min-p    = "0.0";
+              top-k    = "20";
+              presence-penalty="0.0";
               jinja    = "on";
               load-on-startup = "false";
               stop-timeout    = "60";
