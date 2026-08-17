@@ -332,11 +332,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786997699,
-        "narHash": "sha256-yCJoeB9bOODML0wCWM17X9nJzpdkTFldfEPl8snumbo=",
+        "lastModified": 1786998795,
+        "narHash": "sha256-3AXbjD/58og/6qLrNAvdHZvp93NeeX4f+JI2fDV1UQE=",
         "owner": "qhorgues",
         "repo": "NixOS-config",
-        "rev": "04eb89c21ed977806d702a1fe0c97c05c2095837",
+        "rev": "b759eaef1578125d17031924a13e250c15be2939",
         "type": "github"
       },
       "original": {
