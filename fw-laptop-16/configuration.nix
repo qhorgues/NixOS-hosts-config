@@ -10,7 +10,7 @@
       core.network.security-mode = false;
       hardware = {
         ssd.lists = [ "/" "/mnt/Games" ]; # All mountpoint with a SSD
-        framework-fan-ctrl.enable = true; # If you use framework-laptop
+        framework-fan-ctrl.enable = false; # If you use framework-laptop
         powersave.enable = false; # Auto energy saving mode on batterie
         gpu = {
           vendor = "amd"; #  "amd"/"nvidia"/"intel"
