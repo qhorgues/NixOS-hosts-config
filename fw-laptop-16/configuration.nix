@@ -133,7 +133,7 @@
             };
           };
         };
-        modeling.enable = true;
+        modeling.enable = false;
         obs-studio.enable = false;
         games = {
           enable = true;
