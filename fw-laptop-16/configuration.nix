@@ -140,9 +140,7 @@
           latest-unstable-mesa-driver.enable = false;
           force-fsr4-for-rdna3 = true; # Only for AMD radeon 7000 user
           users = [ "quentin" ]; # Allowed user for gamemode
-          game_lib_dirs = [
-            "/mnt/Games"
-          ];
+          shared_steam_dir = "/mnt/Games/SteamLibrary";
           lsfg.enable = false;
           heroic.enable = false;
           lutris.enable = false;
