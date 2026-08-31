@@ -50,12 +50,12 @@
         mpi-lib = false;
         openmp-lib = false;
         rust = true;
-        python = true;
+        python = false;
         node = true;
         php = false;
         sql = true;
         java = false;
-        gnome-dev = true;
+        gnome-dev = false;
         ci = false;
       };
     };
