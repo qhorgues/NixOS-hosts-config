@@ -5,10 +5,6 @@
       ./hardware-configuration.nix
     ];
 
-    boot.kernelParams = lib.mkAfter [
-      "amdgpu.dcdebugmask=0x40010"
-      "amdgpu.abmlevel=0"
-    ];
 
     mx = {
       core.network.security-mode = false;
