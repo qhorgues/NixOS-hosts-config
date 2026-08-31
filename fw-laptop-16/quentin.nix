@@ -18,7 +18,12 @@
       firefox.enable = true; # Install firefox pre setup
       thunderbird.enable = true; # # Install thunderbird
       cryptomator.enable = true; # Install cryptomator
-      office.enable = true; # Install all office tools (libre office, only office, latex studio)
+      # Install all office tools (libre office, only office, latex studio)
+      office = {
+        libre-office.enable = false;
+        latex.enable = true;
+        onlyoffice.enable = true;
+      };
       discord.enable = true; # Install discord flatpak
       element.enable = true; # Install Element flatpak
       audio-enhancer.enable = false; # Install audio enhancer with custom profiles
@@ -26,7 +31,12 @@
       ssh.enable = true; # Install ssh client
       vscode.enable = false; # Install custom VS Code
       kdrive.enable = true; # Install kdrive
-      graphism.enable = true; # Install graphism tools (GIMP, Krita, Inkscape)
+      # Install graphism tools (GIMP, Krita, Inkscape)
+      graphism = {
+        gimp.enable = true;
+        krita.enable = false;
+        inkscape.enable = true;
+      };
       git.enable = true; # Install git with config
       vim.enable = false; # Install vim
       linux-base-tools.enable = true; # Install linux base tools (htop, fastfetch, ...)
