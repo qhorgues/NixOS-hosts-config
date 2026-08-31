@@ -40,7 +40,7 @@
       git.enable = true; # Install git with config
       vim.enable = false; # Install vim
       linux-base-tools.enable = true; # Install linux base tools (htop, fastfetch, ...)
-      winboat.enable = true; # Install Winboat /!\ NEED ENABLE DOCKER ON SYSTEM CONFIG
+      winboat.enable = false; # Install Winboat /!\ NEED ENABLE DOCKER ON SYSTEM CONFIG
 
       # Enable dev tools
       dev = {
