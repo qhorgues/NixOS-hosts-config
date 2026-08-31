@@ -50,7 +50,7 @@
           users = [ "quentin" ]; # Trusted user
         };
         docker = {
-          enable = true; # Enable docker tools
+          enable = false; # Enable docker tools
           users = [ "quentin" ]; # Trusted user
         };
         lamp.enable = false; # Enable Apache/PHP/MariaDB stack
