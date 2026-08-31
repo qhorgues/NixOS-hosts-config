@@ -105,18 +105,20 @@
         };
         printing.enable = false;
         ios-connect.enable = false; # Enable IOS connection tools
+        remote-login = {
+          enable = true;
+          authorizedKeys = [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJBmPru5d8lvYkkooKj3fjE8hFVcpwMW0RxdH/FKikJN quentin@uw-laptop-13"
+          ];
+          wakeOnLan.interfaces = [ "enp199s0f3u1" ];
+        };
         remote-desktop = { # Sunshine game streaming server
           enable = true;
           app = [
             {
-              name = "Smartphone";
-              steam = true;
-              output = "DP-8";
-            }
-            {
               name = "Laptop 13";
               steam = true;
-              output = "DP-7";
+              output = "DP-8";
             }
           ];
         };
@@ -164,19 +166,11 @@
         enable = true;
         displays = [
           {
-            videoOutput = "DP-7";
+            videoOutput = "DP-8";
             width = 1920;
             height = 1080;
             refreshRate = 60;
             displayName = "Laptop13";
-          }
-          {
-            videoOutput = "DP-8";
-            width = 2404;
-            height = 1080;
-            refreshRate = 120;
-            enableHdr = true;
-            displayName = "Smartphone";
           }
         ];
       };
@@ -187,7 +181,6 @@
     ];
 
     networking.hostName = "fw-laptop-16";
-
 
     fileSystems."/mnt/Games" =
     { device = "/dev/disk/by-uuid/1b35568b-4447-4c80-9880-4b359d4ecb6c";
