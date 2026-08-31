@@ -39,6 +39,7 @@
           scaling = 2;
           text-scaling = 0.7;
           remote-desktop = false;
+          rounded-blur = true;
         };
       };
       fonts.enable = true;
